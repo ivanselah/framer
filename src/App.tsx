@@ -15,22 +15,30 @@ const svg = {
 
 const boxVariants = {
   initial: {
+    x: 500,
     opacity: 0,
     scale: 0,
   },
   animate: {
+    x: 0,
     opacity: 1,
     scale: 1,
-    rotateZ: 360,
+    transition: {
+      duration: 1,
+    },
   },
-  leaving: {
+  exit: {
+    x: -500,
     opacity: 0,
-    y: 20,
+    scale: 0,
+    rotateZ: 360,
+    transition: {
+      duration: 1,
+    },
   },
 };
 
 function App() {
-  const [showing, setShowing] = useState(false);
   const x = useMotionValue(0);
   const gradient = useTransform(
     x,
@@ -41,24 +49,21 @@ function App() {
       'linear-gradient(135deg, rgb(0, 84, 240), rgb(0, 164, 240))',
     ]
   );
-
-  const toggleShowing = () => {
-    setShowing((show) => !show);
-  };
+  const [visible, setVisible] = useState(1);
+  const nextPlease = () => setVisible((prev) => (prev === 10 ? 10 : prev + 1));
 
   return (
     <Wrapper style={{ background: gradient }}>
       <AnimatePresence>
-        {showing ? (
-          <Box
-            variants={boxVariants} //
-            initial='initial'
-            animate='animate'
-            exit='leaving'
-          />
-        ) : null}
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) =>
+          visible === num ? (
+            <Box key={num} variants={boxVariants} initial='initial' animate='animate' exit='exit'>
+              {num}
+            </Box>
+          ) : null
+        )}
       </AnimatePresence>
-      <CustomBtn onClick={toggleShowing}>Click</CustomBtn>
+      <button onClick={nextPlease}>Next</button>
     </Wrapper>
   );
 }
@@ -67,33 +72,23 @@ const Wrapper = styled(motion.div)`
   height: 100vh;
   width: 100vw;
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
 `;
 
 const Box = styled(motion.div)`
   position: absolute;
-  top: 200px;
-  width: 500px;
-  height: 300px;
+  top: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 200px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 15px;
+  font-size: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.02);
-`;
-
-const CustomBtn = styled.button`
-  border: none;
-  width: 100px;
-  height: 50px;
-  border-radius: 15px;
-  font-size: 17px;
-  font-weight: bold;
-  margin-top: 100px;
-  cursor: pointer;
-  :active {
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.02);
-  }
 `;
 
 export default App;
