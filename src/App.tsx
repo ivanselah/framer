@@ -8,29 +8,6 @@ import { useState } from 'react';
  */
 
 // property 이름은 상관없음
-const svg = {
-  start: { pathLength: 0, fill: 'rgba(255, 255, 255, 0)' },
-  end: { pathLength: 1, fill: 'rgba(255, 255, 255, 1)' },
-};
-
-const boxVariants = {
-  initial: (custom: boolean) => ({
-    x: custom ? -500 : 500,
-    opacity: 0,
-    scale: 0,
-  }),
-  animate: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-  },
-  exit: (custom: boolean) => ({
-    x: custom ? 500 : -500,
-    opacity: 0,
-    scale: 0,
-    rotateZ: 360,
-  }),
-};
 
 function App() {
   const x = useMotionValue(0);
@@ -43,28 +20,13 @@ function App() {
       'linear-gradient(135deg, rgb(0, 84, 240), rgb(0, 164, 240))',
     ]
   );
-  const [visible, setVisible] = useState(1);
-  const [back, setBack] = useState(false);
-  const prevPlease = () => {
-    setBack(true);
-    setVisible((prev) => (prev === 1 ? 1 : prev - 1));
-  };
-  const nextPlease = () => {
-    setBack(false);
-    setVisible((prev) => (prev === 10 ? 10 : prev + 1));
-  };
+  const [isClick, setIsClick] = useState(false);
+  const toggleClicked = () => setIsClick((prev) => !prev);
 
   return (
-    <Wrapper style={{ background: gradient }}>
-      <AnimatePresence exitBeforeEnter custom={back}>
-        <Box custom={back} key={visible} variants={boxVariants} initial='initial' animate='animate' exit='exit'>
-          {visible}
-        </Box>
-      </AnimatePresence>
-      <div>
-        <button onClick={prevPlease}>Prev</button>
-        <button onClick={nextPlease}>Next</button>
-      </div>
+    <Wrapper onClick={toggleClicked} style={{ background: gradient }}>
+      <Box>{!isClick ? <Circle layoutId='circle' style={{ borderRadius: '50px' }} /> : null}</Box>
+      <Box>{isClick ? <Circle layoutId='circle' style={{ borderRadius: '15px' }} /> : null}</Box>
     </Wrapper>
   );
 }
@@ -74,21 +36,26 @@ const Wrapper = styled(motion.div)`
   width: 100vw;
   display: flex;
   justify-content: center;
-  flex-direction: column;
   align-items: center;
 `;
 
 const Box = styled(motion.div)`
-  position: absolute;
-  top: 300px;
   display: flex;
+  width: 400px;
+  height: 400px;
+  background-color: rgba(255, 255, 255, 0.8);
   justify-content: center;
   align-items: center;
-  width: 400px;
-  height: 200px;
-  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 15px;
+  margin-left: 10px;
   font-size: 30px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.02);
+`;
+
+const Circle = styled(motion.div)`
+  width: 100px;
+  height: 100px;
+  background-color: #00a5ff;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.02);
 `;
 
