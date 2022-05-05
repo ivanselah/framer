@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
+/**
+ * initial 원하는 Element의 초기 상태 입력
+ */
+
 function App() {
   return (
     <Wrapper>
-      <Box transition={{ duration: 2 }} animate={{ borderRadius: '100px' }} />
+      <Box transition={{ type: 'spring', damping: 1, delay: 1 }} initial={{ scale: 0 }} animate={{ scale: 1, rotateZ: 360 }} />
     </Wrapper>
   );
 }
@@ -15,6 +19,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #2e2e2e;
 `;
 
 const Box = styled(motion.div)`
