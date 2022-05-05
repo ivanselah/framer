@@ -14,28 +14,22 @@ const svg = {
 };
 
 const boxVariants = {
-  initial: {
-    x: 500,
+  initial: (custom: boolean) => ({
+    x: custom ? -500 : 500,
     opacity: 0,
     scale: 0,
-  },
+  }),
   animate: {
     x: 0,
     opacity: 1,
     scale: 1,
-    transition: {
-      duration: 1,
-    },
   },
-  exit: {
-    x: -500,
+  exit: (custom: boolean) => ({
+    x: custom ? 500 : -500,
     opacity: 0,
     scale: 0,
     rotateZ: 360,
-    transition: {
-      duration: 1,
-    },
-  },
+  }),
 };
 
 function App() {
@@ -50,20 +44,27 @@ function App() {
     ]
   );
   const [visible, setVisible] = useState(1);
-  const nextPlease = () => setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  const [back, setBack] = useState(false);
+  const prevPlease = () => {
+    setBack(true);
+    setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+  };
+  const nextPlease = () => {
+    setBack(false);
+    setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  };
 
   return (
     <Wrapper style={{ background: gradient }}>
-      <AnimatePresence>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) =>
-          visible === num ? (
-            <Box key={num} variants={boxVariants} initial='initial' animate='animate' exit='exit'>
-              {num}
-            </Box>
-          ) : null
-        )}
+      <AnimatePresence exitBeforeEnter custom={back}>
+        <Box custom={back} key={visible} variants={boxVariants} initial='initial' animate='animate' exit='exit'>
+          {visible}
+        </Box>
       </AnimatePresence>
-      <button onClick={nextPlease}>Next</button>
+      <div>
+        <button onClick={prevPlease}>Prev</button>
+        <button onClick={nextPlease}>Next</button>
+      </div>
     </Wrapper>
   );
 }
