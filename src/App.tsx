@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useViewportScroll } from 'framer-motion';
+import { useEffect } from 'react';
 
 /**
  * initial 원하는 Element의 초기 상태 입력
@@ -23,10 +24,13 @@ function App() {
       'linear-gradient(135deg, rgb(0, 84, 240), rgb(0, 164, 240))',
     ]
   );
+  const { scrollYProgress } = useViewportScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
   return (
     <Wrapper style={{ background: gradient }}>
       <Box
-        style={{ x, rotateZ }} //
+        style={{ x, rotateZ, scale }} //
         drag='x'
         dragSnapToOrigin
         variants={boxVariants}
@@ -37,7 +41,7 @@ function App() {
 }
 
 const Wrapper = styled(motion.div)`
-  height: 100vh;
+  height: 200vh;
   width: 100vw;
   display: flex;
   justify-content: center;
