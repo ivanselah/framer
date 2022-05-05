@@ -3,12 +3,19 @@ import { motion } from 'framer-motion';
 
 /**
  * initial 원하는 Element의 초기 상태 입력
+ * animate 원하는 Element의 끝 상태 및 transition
  */
+
+// property 이름은 상관없음
+const myVariants = {
+  start: { scale: 0 },
+  end: { scale: 1, rotateZ: 360, transition: { type: 'spring', damping: 1, delay: 1 } },
+};
 
 function App() {
   return (
     <Wrapper>
-      <Box transition={{ type: 'spring', damping: 1, delay: 1 }} initial={{ scale: 0 }} animate={{ scale: 1, rotateZ: 360 }} />
+      <Box variants={myVariants} initial='start' animate='end' />
     </Wrapper>
   );
 }
