@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 function App() {
   return (
     <Wrapper>
-      <Box />
-      <motion.div></motion.div>
+      <Box transition={{ duration: 2 }} animate={{ borderRadius: '100px' }} />
     </Wrapper>
   );
 }
@@ -18,7 +17,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Box = styled.div`
+const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
   background-color: tomato;
